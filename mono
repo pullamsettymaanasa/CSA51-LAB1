@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char text[100], encryptedText[100];
+    char key[26] = "QWERTYUIOPLKJHGFDSAZXCVBNM"; // Substitution alphabet
+    int l, i;
+
+    printf("Enter the text: ");
+    scanf("%s", text);
+
+    l = strlen(text);
+
+    // Encrypt the text
+    for(i = 0; i < l; i++) {
+        if (text[i] >= 'a' && text[i] <= 'z') {
+            // Convert lowercase letters to uppercase to match the key
+            encryptedText[i] = key[text[i] - 'a'];
+        } else if (text[i] >= 'A' && text[i] <= 'Z') {
+            // Directly use the key for uppercase letters
+            encryptedText[i] = key[text[i] - 'A'];
+        } else {
+            // Leave non-alphabet characters as is
+            encryptedText[i] = text[i];
+        }
+    }
+
+    encryptedText[l] = '\0'; // Null-terminate the string
+
+    printf("\nEncrypted text: %s\n", encryptedText);
+
+    return 0;
+}
