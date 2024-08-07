@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <string.h>
+
+// Function to XOR each character of the plaintext with the key
+void vernamEncryptDecrypt(char *text, char *key, char *result) {
+    int length = strlen(text);
+    
+    for (int i = 0; i < length; i++) {
+        result[i] = text[i] ^ key[i];
+    }
+    result[length] = '\0'; // Null-terminate the string
+}
+
+// Function to convert a string to uppercase
+void toUpperCase(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] = str[i] - 32;
+        }
+    }
+}
+
+int main() {
+    char text[100], key[100], encryptedText[100], decryptedText[100];
+    int l, keyLength;
+
+    printf("Enter the text: ");
+    scanf("%s", text);
+    printf("Enter the key (same length as text): ");
+    scanf("%s", key);
+
+    toUpperCase(text); // Convert text to uppercase
+    toUpperCase(key);  // Convert key to uppercase
+
+    l = strlen(text);
+    keyLength = strlen(key);
+
+    if (l != keyLength) {
+        printf("Error: Key must be the same length as the text.\n");
+        return 1;
+    }
+
+    vernamEncryptDecrypt(text, key, encryptedText);
+    printf("\nEncrypted text (hex format): ");
+    for (int i = 0; i < l; i++) {
+        printf("%02X", (unsigned char)encryptedText[i]);
+    }
+    printf("\n");
+
+    vernamEncryptDecrypt(encryptedText, key, decryptedText);
+    printf("Decrypted text: %s\n", decryptedText);
+
+    return 0;
+}
