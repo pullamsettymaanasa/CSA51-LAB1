@@ -1,0 +1,39 @@
+#include <stdio.h>
+
+// Function to compute modular exponentiation
+long long int modularExponentiation(long long base, long long exp, long long mod) {
+    long long result = 1;
+    while (exp > 0) {
+        if (exp % 2 == 1) {
+            result = (result * base) % mod;
+        }
+        base = (base * base) % mod;
+        exp = exp / 2;
+    }
+    return result;
+}
+
+// Main function to demonstrate RSA algorithm
+int main() {
+    // RSA parameters (small primes for simplicity)
+    long long p = 3, q = 11;    // Two prime numbers
+    long long n = p * q;        // Modulus
+    long long phi = (p - 1) * (q - 1); // Euler's totient function
+
+    // Public key (e) and Private key (d)
+    long long e = 7; // Public exponent (must be coprime with phi)
+    long long d = 103; // Private exponent (d = e^(-1) mod phi)
+
+    // Plaintext to be encrypted
+    long long plaintext = 8;
+
+    // Encryption: ciphertext = (plaintext^e) % n
+    long long ciphertext = modularExponentiation(plaintext, e, n);
+    printf("Encrypted text: %lld\n", ciphertext);
+
+    // Decryption: decryptedtext = (ciphertext^d) % n
+    long long decryptedtext = modularExponentiation(ciphertext, d, n);
+    printf("Decrypted text: %lld\n", decryptedtext);
+
+    return 0;
+}
