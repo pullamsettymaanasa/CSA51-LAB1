@@ -1,0 +1,23 @@
+#include <stdio.h>
+
+unsigned char simple_des_encrypt(unsigned char plaintext, unsigned char key) {
+    return plaintext ^ key; 
+}
+
+unsigned char simple_des_decrypt(unsigned char ciphertext, unsigned char key) {
+    return ciphertext ^ key; 
+}
+
+int main() {
+    unsigned char plaintext = 0xCC; 
+    unsigned char key = 0xAA;       
+
+    unsigned char ciphertext = simple_des_encrypt(plaintext, key);
+    unsigned char decrypted = simple_des_decrypt(ciphertext, key);
+
+    printf("Plaintext: 0x%02X\n", plaintext);
+    printf("Ciphertext: 0x%02X\n", ciphertext);
+    printf("Decrypted: 0x%02X\n", decrypted);
+
+    return 0;
+}
