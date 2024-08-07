@@ -1,0 +1,66 @@
+#include <stdio.h>
+#include <string.h>
+
+// Function to perform matrix multiplication
+void matrixMultiply(int a[2][2], int b[2], int result[2]) {
+    result[0] = (a[0][0] * b[0] + a[0][1] * b[1]) % 26;
+    result[1] = (a[1][0] * b[0] + a[1][1] * b[1]) % 26;
+}
+
+// Function to convert characters to their corresponding numerical values (A=0, B=1, ..., Z=25)
+void charToNum(char *text, int *num) {
+    for(int i = 0; text[i] != '\0'; i++) {
+        num[i] = text[i] - 'A';
+    }
+}
+
+// Function to convert numerical values back to characters
+void numToChar(int *num, char *text, int length) {
+    for(int i = 0; i < length; i++) {
+        text[i] = (num[i] % 26) + 'A';
+    }
+    text[length] = '\0'; // Null-terminate the string
+}
+
+int main() {
+    char text[100], encryptedText[100];
+    int textNum[100], encryptedNum[100];
+    int key[2][2] = { {5, 17}, {4, 15} }; // Example key matrix
+    int length, i;
+
+    printf("Enter the text: ");
+    scanf("%s", text);
+
+    // Convert text to uppercase
+    for (i = 0; text[i] != '\0'; i++) {
+        if (text[i] >= 'a' && text[i] <= 'z') {
+            text[i] = text[i] - 32;
+        }
+    }
+
+    length = strlen(text);
+
+    // Ensure the text length is even by padding with 'X' if necessary
+    if (length % 2 != 0) {
+        text[length] = 'X';
+        text[length + 1] = '\0';
+        length++;
+    }
+
+    charToNum(text, textNum);
+
+    // Encrypt the text in blocks of 2
+    for (i = 0; i < length; i += 2) {
+        int block[2] = { textNum[i], textNum[i + 1] };
+        int encryptedBlock[2];
+        matrixMultiply(key, block, encryptedBlock);
+        encryptedNum[i] = encryptedBlock[0];
+        encryptedNum[i + 1] = encryptedBlock[1];
+    }
+
+    numToChar(encryptedNum, encryptedText, length);
+
+    printf("\nEncrypted text: %s\n", encryptedText);
+
+    return 0;
+}
