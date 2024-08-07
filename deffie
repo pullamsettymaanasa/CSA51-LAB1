@@ -1,0 +1,35 @@
+#include <stdio.h>
+
+// Function to perform modular exponentiation
+long long int modularExponentiation(long long int base, long long int exp, long long int mod) {
+    long long result = 1;
+    base = base % mod;  // Handle base greater than mod
+    while (exp > 0) {
+        if (exp % 2 == 1) {
+            result = (result * base) % mod;
+        }
+        exp = exp >> 1;  // Divide exp by 2
+        base = (base * base) % mod;
+    }
+    return result;
+}
+
+int main() {
+    long long int p = 47, g = 7, a = 6, b = 15;
+    long long int A, B, shared_secret_A, shared_secret_B;
+
+    // Compute A = g^a % p
+    A = modularExponentiation(g, a, p);
+    
+    // Compute B = g^b % p
+    B = modularExponentiation(g, b, p);
+
+    // Compute shared secret
+    shared_secret_A = modularExponentiation(B, a, p);
+    shared_secret_B = modularExponentiation(A, b, p);
+
+    printf("Shared secret computed by Alice: %lld\n", shared_secret_A);
+    printf("Shared secret computed by Bob: %lld\n", shared_secret_B);
+
+    return 0;
+}
