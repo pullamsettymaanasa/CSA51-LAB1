@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <string.h>
+
+void toUpperCase(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (str[i] >= 'a' && str[i] <= 'z') {
+            str[i] = str[i] - 32;
+        }
+    }
+}
+
+int main() {
+    char text[100], key[100], encryptedText[100];
+    int l, keyLength, i;
+
+    printf("Enter the text: ");
+    scanf("%s", text);
+    printf("Enter the key: ");
+    scanf("%s", key);
+
+    toUpperCase(text); // Convert text to uppercase
+    toUpperCase(key);  // Convert key to uppercase
+
+    l = strlen(text);
+    keyLength = strlen(key);
+
+    // Encrypt the text
+    for(i = 0; i < l; i++) {
+        if (text[i] >= 'A' && text[i] <= 'Z') {
+            encryptedText[i] = ((text[i] - 'A') + (key[i % keyLength] - 'A')) % 26 + 'A';
+        } else {
+            // Leave non-alphabet characters as is
+            encryptedText[i] = text[i];
+        }
+    }
+
+    encryptedText[l] = '\0'; // Null-terminate the string
+
+    printf("\nEncrypted text: %s\n", encryptedText);
+
+    return 0;
+}
