@@ -1,0 +1,55 @@
+#include <stdio.h>
+
+// Function to perform modular exponentiation
+long long int modularExponentiation(long long int base, long long int exp, long long int mod) {
+    long long result = 1;
+    base = base % mod;  // Handle base greater than mod
+    while (exp > 0) {
+        if (exp % 2 == 1) {
+            result = (result * base) % mod;
+        }
+        exp = exp >> 1;  // Divide exp by 2
+        base = (base * base) % mod;
+    }
+    return result;
+}
+
+// Function to compute modular inverse
+long long int modularInverse(long long int a, long long int m) {
+    a = a % m;
+    for (long long int x = 1; x < m; x++) {
+        if ((a * x) % m == 1) {
+            return x;
+        }
+    }
+    return 1;
+}
+
+int main() {
+    // Parameters
+    long long int p = 47;     // Prime number
+    long long int q = 23;     // Another prime number
+    long long int g = 7;      // g is a primitive root modulo p
+    long long int x = 6;      // Private key
+    long long int k = 3;      // Random integer (k must be kept secret and should be coprime to q)
+    long long int h = 9;      // Message hash (for simplicity, using a small number)
+    
+    // Public key computation
+    long long int y = modularExponentiation(g, x, p);
+    printf("Public key (y): %lld\n", y);
+    
+    // Signature generation
+    long long int r = modularExponentiation(g, k, p) % q;
+    long long int s = (modularInverse(k, q) * (h + x * r)) % q;
+    printf("Signature: (r, s) = (%lld, %lld)\n", r, s);
+    
+    // Signature verification
+    long long int w = modularInverse(s, q);
+    long long int u1 = (h * w) % q;
+    long long int u2 = (r * w) % q;
+    long long int v = ((modularExponentiation(g, u1, p) * modularExponentiation(y, u2, p)) % p) % q;
+    
+    printf("Verification: %s\n", (v == r) ? "Successful" : "Failed");
+    
+    return 0;
+}
